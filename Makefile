@@ -23,10 +23,9 @@ dirsetup:
 
 # generate arXiv archive
 arXiv:
-	rm -rf arXiv
+	rm -rf ./arXiv/
 	mkdir -p ./$(ARCHIVE)
-	rm -rf ./$(ARCHIVE)/*
-	cp -r $(TEXFILES) ./$(ARCHIVE)/
+	cp $(MAIN).tex ./$(ARCHIVE)/
 	cp -r ./figures ./$(ARCHIVE)/
 	cp build/$(MAIN).bbl ./$(ARCHIVE)/
 
