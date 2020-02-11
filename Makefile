@@ -1,15 +1,15 @@
 # config
-MAIN=paper
-BIB=lit.bib
-# this must be always at least "." (otherwise things might be written to "/")
+MAIN=main
+BIB=$(MAIN).bib
 OUTDIR=build
 
 # Variables for later use
+ARCHIVE=arXiv
 TEXFILES=$(shell find . -name "*.tex")
 MAINDOCPATH=$(OUTDIR)/$(MAIN).pdf
 
 # generic compilation setup
-all: dirsetup $(MAINDOCPATH)
+all: dirsetup $(MAINDOCPATH) arXiv
 
 $(MAINDOCPATH): $(TEXFILES) $(BIB)
 	latexmk -outdir=$(OUTDIR) -pdf $(MAIN).tex
@@ -21,10 +21,19 @@ dirsetup:
 		for d in $$texdirs; do mkdir -p $(OUTDIR)/$$d ; done \
 	fi
 
+# generate arXiv archive
+arXiv:
+	rm -rf arXiv
+	mkdir -p ./$(ARCHIVE)
+	rm -rf ./$(ARCHIVE)/*
+	cp -r $(TEXFILES) ./$(ARCHIVE)/
+	cp -r ./figures ./$(ARCHIVE)/
+	cp build/$(MAIN).bbl ./$(ARCHIVE)/
+
 clean:
 	latexmk -outdir=$(OUTDIR) -CA
 
-clean_all:
-	rm -r ./$(OUTDIR)
+clean-all:
+	rm -r ./$(OUTDIR) ./arXiv
 
-.PHONY: all diresetup clean clean_all
+.PHONY: all arXiv dirsetup clean clean_all
